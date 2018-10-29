@@ -38,6 +38,39 @@ public:
         fill(1);
     }
 
+    class MatrixRow
+    {
+    public:
+        MatrixRow(T* p_elementsData, MatrixSize p_row)
+            : m_elementsData{p_elementsData}, m_row{p_row}
+        {
+        }
+
+        T& operator[](int p_col)
+        {
+            return m_elementsData[m_row * Cols + p_col];
+        }
+
+        const T& operator[](int p_col) const
+        {
+            return m_elementsData[m_row * Cols + p_col];    
+        }
+
+    private:
+        T* m_elementsData {nullptr};
+        MatrixSize m_row;
+    };
+
+    MatrixRow operator[](int p_row)
+    {
+        return MatrixRow(m_elements, p_row);
+    }
+
+    const MatrixRow operator[](int p_row) const
+    {
+        return MatrixRow(m_elements, p_row);
+    }
+
     friend std::ostream& operator<<(std::ostream& p_out, const Matrix<T, Rows, Cols>& p_matrix)
     {
         return p_matrix.output(p_out);
