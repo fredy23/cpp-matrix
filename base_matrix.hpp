@@ -13,9 +13,9 @@ protected:
     {
     }
 
-    void setData(T* p_data)
+    void setData(T* p_elementsData)
     {
-        m_elementsData = p_data;
+        m_elementsData = p_elementsData;
     }
 
     void fillBase(const T& p_value);
