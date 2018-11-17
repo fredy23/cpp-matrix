@@ -14,10 +14,10 @@ public:
     using value_type = T;
 
     Matrix(const std::initializer_list<T>& p_elements);
-    Matrix(const Matrix<T, Rows, Cols>& p_other);
-    Matrix<T, Rows, Cols>& operator=(const Matrix<T, Rows, Cols>& p_other);
-    Matrix(Matrix<T, Rows, Cols>&& p_other);
-    Matrix<T, Rows, Cols>& operator=(Matrix<T, Rows, Cols>&& p_other);
+    Matrix(const Matrix& p_other);
+    Matrix& operator=(const Matrix& p_other);
+    Matrix(Matrix&& p_other);
+    Matrix& operator=(Matrix&& p_other);
     ~Matrix();
 
     const T& at(MatrixSize p_row, MatrixSize p_col) const;
@@ -71,7 +71,7 @@ public:
         return MatrixRow(m_elements, p_row);
     }
 
-    friend std::ostream& operator<<(std::ostream& p_out, const Matrix<T, Rows, Cols>& p_matrix)
+    friend std::ostream& operator<<(std::ostream& p_out, const Matrix& p_matrix)
     {
         return p_matrix.output(p_out);
     }
@@ -100,14 +100,14 @@ Matrix<T, Rows, Cols>::Matrix(const std::initializer_list<T>& p_elements)
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
-Matrix<T, Rows, Cols>::Matrix(const Matrix<T, Rows, Cols>& p_other)
+Matrix<T, Rows, Cols>::Matrix(const Matrix& p_other)
     : Matrix(std::initializer_list<T>{})
 {
     std::copy(p_other.m_elements, p_other.m_elements + (Rows * Cols), m_elements);
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
-Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(const Matrix<T, Rows, Cols>& p_other)
+Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(const Matrix& p_other)
 {
     if(this == &p_other)
     {
@@ -120,7 +120,7 @@ Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(const Matrix<T, Rows, Co
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
-Matrix<T, Rows, Cols>::Matrix(Matrix<T, Rows, Cols>&& p_other)
+Matrix<T, Rows, Cols>::Matrix(Matrix&& p_other)
     : BaseMatrix<T>(Rows, Cols), m_elements{p_other.m_elements}
 {
     p_other.m_elements = nullptr;
@@ -129,7 +129,7 @@ Matrix<T, Rows, Cols>::Matrix(Matrix<T, Rows, Cols>&& p_other)
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
-Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(Matrix<T, Rows, Cols>&& p_other)
+Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(Matrix&& p_other)
 {
     std::swap(m_elements, p_other.m_elements);
     p_other.BaseMatrix<T>::setData(p_other.m_elements);
