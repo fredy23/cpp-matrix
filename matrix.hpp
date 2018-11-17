@@ -109,11 +109,6 @@ Matrix<T, Rows, Cols>::Matrix(const Matrix& p_other)
 template<typename T, MatrixSize Rows, MatrixSize Cols>
 Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(const Matrix& p_other)
 {
-    if(this == &p_other)
-    {
-        return *this;
-    }
-
     std::copy(p_other.m_elements, p_other.m_elements + (Rows * Cols), m_elements);
 
     return *this;
