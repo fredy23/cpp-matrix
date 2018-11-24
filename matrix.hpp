@@ -16,8 +16,8 @@ public:
     Matrix(const std::initializer_list<T>& p_elements);
     Matrix(const Matrix& p_other);
     Matrix& operator=(const Matrix& p_other);
-    Matrix(Matrix&& p_other);
-    Matrix& operator=(Matrix&& p_other);
+    Matrix(Matrix&& p_other) noexcept;
+    Matrix& operator=(Matrix&& p_other) noexcept;
     ~Matrix();
 
     const T& at(MatrixSize p_row, MatrixSize p_col) const;
@@ -115,7 +115,7 @@ Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(const Matrix& p_other)
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
-Matrix<T, Rows, Cols>::Matrix(Matrix&& p_other)
+Matrix<T, Rows, Cols>::Matrix(Matrix&& p_other) noexcept
     : BaseMatrix<T>(Rows, Cols), m_elements{p_other.m_elements}
 {
     p_other.m_elements = nullptr;
@@ -124,7 +124,7 @@ Matrix<T, Rows, Cols>::Matrix(Matrix&& p_other)
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
-Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(Matrix&& p_other)
+Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(Matrix&& p_other) noexcept
 {
     std::swap(m_elements, p_other.m_elements);
     p_other.BaseMatrix<T>::setData(p_other.m_elements);
