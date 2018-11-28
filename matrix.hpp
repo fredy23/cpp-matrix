@@ -30,21 +30,6 @@ public:
         return BaseMatrix<T>::atBase(p_row, p_col);
     }
 
-    void fill(const T& p_value)
-    {
-        BaseMatrix<T>::fillBase(p_value);
-    }
-
-    void zeros()
-    {
-        fill(0);
-    }
-
-    void ones()
-    {
-        fill(1);
-    }
-
     class MatrixRow
     {
     public:
@@ -76,6 +61,31 @@ public:
     const MatrixRow operator[](int p_row) const
     {
         return MatrixRow(m_elements, p_row);
+    }
+
+    T* data() noexcept
+    {
+        return m_elements;
+    }
+
+    const T* data() const noexcept
+    {
+        return m_elements;
+    }
+
+    void fill(const T& p_value)
+    {
+        BaseMatrix<T>::fillBase(p_value);
+    }
+
+    void zeros()
+    {
+        fill(0);
+    }
+
+    void ones()
+    {
+        fill(1);
     }
 
     friend std::ostream& operator<<(std::ostream& p_out, const Matrix& p_matrix)
