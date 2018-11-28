@@ -20,8 +20,15 @@ public:
     Matrix& operator=(Matrix&& p_other) noexcept;
     ~Matrix();
 
-    const T& at(MatrixSize p_row, MatrixSize p_col) const;
-    T& at(MatrixSize p_row, MatrixSize p_col);
+    T& at(MatrixSize p_row, MatrixSize p_col)
+    {
+        return const_cast<T&>(static_cast<const Matrix&>(*this).at(p_row, p_col));
+    }
+
+    const T& at(MatrixSize p_row, MatrixSize p_col) const
+    {
+        return BaseMatrix<T>::atBase(p_row, p_col);
+    }
 
     void fill(const T& p_value)
     {
@@ -110,7 +117,6 @@ template<typename T, MatrixSize Rows, MatrixSize Cols>
 Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(const Matrix& p_other)
 {
     std::copy(p_other.m_elements, p_other.m_elements + (Rows * Cols), m_elements);
-
     return *this;
 }
 
@@ -129,7 +135,6 @@ Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(Matrix&& p_other) noexce
     std::swap(m_elements, p_other.m_elements);
     p_other.BaseMatrix<T>::setData(p_other.m_elements);
     BaseMatrix<T>::setData(m_elements);
-    
     return *this;
 }
 
@@ -137,16 +142,4 @@ template<typename T, MatrixSize Rows, MatrixSize Cols>
 Matrix<T, Rows, Cols>::~Matrix()
 {
     delete[] m_elements;
-}
-
-template<typename T, MatrixSize Rows, MatrixSize Cols>
-const T& Matrix<T, Rows, Cols>::at(MatrixSize p_row, MatrixSize p_col) const
-{
-    return BaseMatrix<T>::atBase(p_row, p_col);
-}
-
-template<typename T, MatrixSize Rows, MatrixSize Cols>
-T& Matrix<T, Rows, Cols>::at(MatrixSize p_row, MatrixSize p_col)
-{
-    return const_cast<T&>(static_cast<const Matrix<T, Rows, Cols>&>(*this).at(p_row, p_col));
 }
