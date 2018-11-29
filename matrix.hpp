@@ -11,7 +11,14 @@ template<typename T, MatrixSize Rows, MatrixSize Cols = Rows>
 class Matrix : private BaseMatrix<T>
 {
 public:
-    using value_type = T;
+    using value_type = T; 
+    using size_type = std::size_t;
+    using difference_type = std::ptrdiff_t;
+
+    using reference = T&;
+    using const_reference = const T&;
+    using pointer = T*;
+    using const_pointer = const T*;
 
     Matrix(const std::initializer_list<T>& p_elements);
     Matrix(const Matrix& p_other);
@@ -71,6 +78,166 @@ public:
     const T* data() const noexcept
     {
         return m_elements;
+    }
+
+    template<typename U>
+    class MatrixIterator
+    {
+    public:
+        using value_type = Matrix::value_type;
+        using difference_type = Matrix::difference_type;
+        using reference = Matrix::reference;
+        using pointer = Matrix::pointer;
+        using iterator_category = std::random_access_iterator_tag;
+
+        MatrixIterator()
+            : m_elementsData{nullptr}
+        {
+        }
+
+        MatrixIterator(U* p_elementsData)
+            : m_elementsData{p_elementsData}
+        {
+        }
+
+        reference operator*() const noexcept
+        {
+            return *m_elementsData;
+        }
+
+        pointer operator->() const noexcept
+        {
+            return m_elementsData;
+        }
+
+        MatrixIterator& operator++() noexcept
+        {
+            ++m_elementsData;
+            return *this;
+        }
+
+        MatrixIterator operator++(int) noexcept
+        {
+            return MatrixIterator(m_elementsData++);
+        }
+
+        MatrixIterator& operator--() noexcept
+        {
+            --m_elementsData;
+            return *this;
+        }
+
+        MatrixIterator operator--(int) noexcept
+        {
+            return MatrixIterator(m_elementsData--);
+        }
+
+        MatrixIterator& operator+=(difference_type p_distance) noexcept
+        {
+            m_elementsData += p_distance;
+            return *this;
+        }
+
+        const MatrixIterator operator+(difference_type p_distance) const noexcept
+        {
+            return MatrixIterator(m_elementsData + p_distance);
+        }
+
+        MatrixIterator& operator-=(difference_type p_distance) noexcept
+        {
+            m_elementsData -= p_distance;
+            return *this;
+        }
+
+        const MatrixIterator operator-(difference_type p_distance) const noexcept
+        {
+            return MatrixIterator(m_elementsData - p_distance);
+        }
+
+        reference& operator[](std::size_t p_index)
+        {
+            return m_elementsData[p_index];
+        }
+
+        friend const MatrixIterator operator+(
+            difference_type p_distance,
+            const MatrixIterator& p_other)
+        {
+            return MatrixIterator(p_other.m_elementsData + p_distance);
+        }
+
+        friend bool operator==(
+            const MatrixIterator& p_left,
+            const MatrixIterator& p_right) noexcept
+        {
+            return p_left.m_elementsData == p_right.m_elementsData;
+        }
+
+        friend bool operator!=(
+            const MatrixIterator& p_left,
+            const MatrixIterator& p_right) noexcept
+        {
+            return !(p_left == p_right);
+        }
+
+        friend bool operator<(
+            const MatrixIterator& p_left,
+            const MatrixIterator& p_right) noexcept
+        {
+            return p_left.m_elementsData < p_right.m_elementsData;
+        }
+
+        friend bool operator>(
+            const MatrixIterator& p_left,
+            const MatrixIterator& p_right) noexcept
+        {
+            return p_right.m_elementsData < p_left.m_elementsData;
+        }
+
+        friend bool operator<=(
+            const MatrixIterator& p_left,
+            const MatrixIterator& p_right) noexcept
+        {
+            return !(p_right.m_elementsData < p_left.m_elementsData);
+        }
+
+        friend bool operator>=(
+            const MatrixIterator& p_left,
+            const MatrixIterator& p_right) noexcept
+        {
+            return !(p_left.m_elementsData < p_right.m_elementsData);
+        }
+
+    private:
+        U* m_elementsData;
+    };
+
+    using iterator = MatrixIterator<T>;
+    using const_iterator = MatrixIterator<const T>;
+
+    iterator begin() noexcept
+    {
+        return iterator(m_elements);
+    }
+
+    const_iterator begin() const noexcept
+    {
+        return const_iterator(m_elements);
+    }
+
+    iterator end() noexcept
+    {
+        return iterator(m_elements + size());
+    }
+
+    const_iterator end() const noexcept
+    {
+        return const_iterator(m_elements + size());
+    }
+
+    size_type size() const noexcept
+    {
+        return Rows * Cols;
     }
 
     void fill(const T& p_value)
