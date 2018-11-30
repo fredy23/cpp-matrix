@@ -18,7 +18,6 @@ protected:
         m_elementsData = p_elementsData;
     }
 
-    void fillBase(const T& p_value);
     const T& atBase(MatrixSize p_row, MatrixSize p_col) const;
 
     std::ostream& outputBase(std::ostream& p_out) const;
@@ -29,15 +28,6 @@ private:
 
     T* m_elementsData {nullptr};
 };
-
-template<typename T>
-void BaseMatrix<T>::fillBase(const T& p_value)
-{
-    for(auto i = 0u; i < m_rows * m_cols; ++i)
-    {
-        m_elementsData[i] = p_value;
-    }
-}
 
 template<typename T>
 const T& BaseMatrix<T>::atBase(MatrixSize p_row, MatrixSize p_col) const

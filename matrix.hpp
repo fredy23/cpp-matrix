@@ -300,21 +300,6 @@ public:
         return Rows * Cols;
     }
 
-    void fill(const T& p_value)
-    {
-        BaseMatrix<T>::fillBase(p_value);
-    }
-
-    void zeros()
-    {
-        fill(0);
-    }
-
-    void ones()
-    {
-        fill(1);
-    }
-
     friend std::ostream& operator<<(std::ostream& p_out, const Matrix& p_matrix)
     {
         return p_matrix.output(p_out);
