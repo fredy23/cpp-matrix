@@ -29,12 +29,12 @@ public:
     Matrix& operator=(Matrix&& p_other) noexcept;
     ~Matrix();
 
-    T& at(MatrixSize p_row, MatrixSize p_col)
+    reference at(MatrixSize p_row, MatrixSize p_col)
     {
-        return const_cast<T&>(static_cast<const Matrix&>(*this).at(p_row, p_col));
+        return const_cast<reference>(static_cast<const Matrix&>(*this).at(p_row, p_col));
     }
 
-    const T& at(MatrixSize p_row, MatrixSize p_col) const
+    const_reference at(MatrixSize p_row, MatrixSize p_col) const
     {
         return BaseMatrix<T>::atBase(p_row, p_col);
     }
@@ -42,23 +42,23 @@ public:
     class MatrixRow
     {
     public:
-        MatrixRow(T* p_elementsData, MatrixSize p_row)
+        MatrixRow(pointer p_elementsData, MatrixSize p_row)
             : m_elementsData{p_elementsData}, m_row{p_row}
         {
         }
 
-        T& operator[](MatrixSize p_col) noexcept
+        reference operator[](MatrixSize p_col) noexcept
         {
-            return m_elementsData[m_row * Cols + p_col];
+            return *(m_elementsData + (m_row * Cols + p_col));
         }
 
-        const T& operator[](MatrixSize p_col) const noexcept
+        const_reference operator[](MatrixSize p_col) const noexcept
         {
-            return m_elementsData[m_row * Cols + p_col];    
+            return *(m_elementsData + (m_row * Cols + p_col));
         }
 
     private:
-        T* m_elementsData {nullptr};
+        pointer m_elementsData {nullptr};
         MatrixSize m_row;
     };
 
@@ -306,7 +306,7 @@ public:
     }
 
 private:
-    T* m_elements;
+    pointer m_elements;
 
     std::ostream& output(std::ostream& p_out) const
     {
