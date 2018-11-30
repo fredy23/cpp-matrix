@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <iterator>
+#include <type_traits>
 
 #include "base_matrix.hpp"
 
@@ -99,9 +100,22 @@ public:
         {
         }
 
-        MatrixIterator(IteratorType p_elementsData)
+        explicit MatrixIterator(const IteratorType& p_elementsData)
             : m_elementsData{p_elementsData}
         {
+        }
+
+        template<typename Iterator, typename = typename std::enable_if_t<
+            std::is_same<Iterator, typename Matrix::pointer>::value>
+        >
+        MatrixIterator(const MatrixIterator<Iterator>& p_iterator)
+            : m_elementsData{p_iterator.base()}
+        {
+        }
+
+        const IteratorType& base() const noexcept
+        {
+            return m_elementsData;
         }
 
         reference operator*() const noexcept
