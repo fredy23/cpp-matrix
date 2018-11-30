@@ -253,6 +253,16 @@ public:
         return const_iterator(m_elements + size());
     }
 
+    const_iterator cbegin() const noexcept
+    {
+        return const_iterator(m_elements);
+    }
+
+    const_iterator cend() const noexcept
+    {
+        return const_iterator(m_elements + size());
+    }
+
     size_type size() const noexcept
     {
         return Rows * Cols;
