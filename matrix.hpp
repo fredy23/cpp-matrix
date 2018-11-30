@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <algorithm>
 #include <cstdint>
+#include <iterator>
 
 #include "base_matrix.hpp"
 
@@ -80,22 +81,25 @@ public:
         return m_elements;
     }
 
-    template<typename U>
+    template<typename IteratorType>
     class MatrixIterator
     {
+    private:
+        using traits_type = std::iterator_traits<IteratorType>;
+
     public:
-        using value_type = Matrix::value_type;
-        using difference_type = Matrix::difference_type;
-        using reference = Matrix::reference;
-        using pointer = Matrix::pointer;
-        using iterator_category = std::random_access_iterator_tag;
+        using value_type = typename traits_type::value_type;
+        using difference_type = typename traits_type::difference_type;
+        using reference = typename traits_type::reference;
+        using pointer = typename traits_type::pointer;
+        using iterator_category = typename traits_type::iterator_category;
 
         MatrixIterator()
             : m_elementsData{nullptr}
         {
         }
 
-        MatrixIterator(U* p_elementsData)
+        MatrixIterator(IteratorType p_elementsData)
             : m_elementsData{p_elementsData}
         {
         }
@@ -154,14 +158,14 @@ public:
             return MatrixIterator(m_elementsData - p_distance);
         }
 
-        reference& operator[](std::size_t p_index)
+        reference& operator[](difference_type p_distance) const noexcept
         {
-            return m_elementsData[p_index];
+            return *(m_elementsData + p_distance);
         }
 
         friend const MatrixIterator operator+(
             difference_type p_distance,
-            const MatrixIterator& p_other)
+            const MatrixIterator& p_other) noexcept
         {
             return MatrixIterator(p_other.m_elementsData + p_distance);
         }
@@ -209,11 +213,11 @@ public:
         }
 
     private:
-        U* m_elementsData;
+        IteratorType m_elementsData;
     };
 
-    using iterator = MatrixIterator<T>;
-    using const_iterator = MatrixIterator<const T>;
+    using iterator = MatrixIterator<pointer>;
+    using const_iterator = MatrixIterator<const_pointer>;
 
     iterator begin() noexcept
     {
