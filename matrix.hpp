@@ -12,14 +12,14 @@ template<typename T, MatrixSize Rows, MatrixSize Cols = Rows>
 class Matrix : private BaseMatrix<T>
 {
 public:
-    using value_type = T; 
-    using size_type = std::size_t;
-    using difference_type = std::ptrdiff_t;
+    using value_type        = T; 
+    using size_type         = std::size_t;
+    using difference_type   = std::ptrdiff_t;
 
-    using reference = T&;
-    using const_reference = const T&;
-    using pointer = T*;
-    using const_pointer = const T*;
+    using reference         = T&;
+    using const_reference   = const T&;
+    using pointer           = T*;
+    using const_pointer     = const T*;
 
     Matrix(const std::initializer_list<T>& p_elements);
     Matrix(const Matrix& p_other);
@@ -71,12 +71,12 @@ public:
         return MatrixRow(m_elements, p_row);
     }
 
-    T* data() noexcept
+    pointer data() noexcept
     {
         return m_elements;
     }
 
-    const T* data() const noexcept
+    const_pointer data() const noexcept
     {
         return m_elements;
     }
@@ -85,13 +85,13 @@ public:
     class MatrixIterator
     {
     private:
-        using traits_type = std::iterator_traits<IteratorType>;
+        using traits_type       = std::iterator_traits<IteratorType>;
 
     public:
-        using value_type = typename traits_type::value_type;
-        using difference_type = typename traits_type::difference_type;
-        using reference = typename traits_type::reference;
-        using pointer = typename traits_type::pointer;
+        using value_type        = typename traits_type::value_type;
+        using difference_type   = typename traits_type::difference_type;
+        using reference         = typename traits_type::reference;
+        using pointer           = typename traits_type::pointer;
         using iterator_category = typename traits_type::iterator_category;
 
         MatrixIterator()
@@ -216,8 +216,8 @@ public:
         IteratorType m_elementsData;
     };
 
-    using iterator = MatrixIterator<pointer>;
-    using const_iterator = MatrixIterator<const_pointer>;
+    using iterator          = MatrixIterator<pointer>;
+    using const_iterator    = MatrixIterator<const_pointer>;
 
     iterator begin() noexcept
     {
