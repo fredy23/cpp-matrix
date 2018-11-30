@@ -47,12 +47,12 @@ public:
         {
         }
 
-        T& operator[](MatrixSize p_col)
+        T& operator[](MatrixSize p_col) noexcept
         {
             return m_elementsData[m_row * Cols + p_col];
         }
 
-        const T& operator[](MatrixSize p_col) const
+        const T& operator[](MatrixSize p_col) const noexcept
         {
             return m_elementsData[m_row * Cols + p_col];    
         }
@@ -62,12 +62,12 @@ public:
         MatrixSize m_row;
     };
 
-    MatrixRow operator[](MatrixSize p_row)
+    MatrixRow operator[](MatrixSize p_row) noexcept
     {
         return MatrixRow(m_elements, p_row);
     }
 
-    const MatrixRow operator[](MatrixSize p_row) const
+    const MatrixRow operator[](MatrixSize p_row) const noexcept
     {
         return MatrixRow(m_elements, p_row);
     }
