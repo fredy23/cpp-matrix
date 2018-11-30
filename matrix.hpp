@@ -230,8 +230,10 @@ public:
         IteratorType m_elementsData;
     };
 
-    using iterator          = MatrixIterator<pointer>;
-    using const_iterator    = MatrixIterator<const_pointer>;
+    using iterator                  = MatrixIterator<pointer>;
+    using const_iterator            = MatrixIterator<const_pointer>;
+    using reverse_iterator          = std::reverse_iterator<iterator>;
+    using const_reverse_iterator    = std::reverse_iterator<const_iterator>;
 
     iterator begin() noexcept
     {
@@ -261,6 +263,36 @@ public:
     const_iterator cend() const noexcept
     {
         return const_iterator(m_elements + size());
+    }
+
+    reverse_iterator rbegin() noexcept
+    {
+        return reverse_iterator(end());
+    }
+
+    const_reverse_iterator rbegin() const noexcept
+    {
+        return const_reverse_iterator(end());
+    }
+
+    reverse_iterator rend() noexcept
+    {
+        return reverse_iterator(begin());
+    }
+
+    const_reverse_iterator rend() const noexcept
+    {
+        return const_reverse_iterator(begin());
+    }
+
+    const_reverse_iterator crbegin() const noexcept
+    {
+        return const_reverse_iterator(end());
+    }
+
+    const_reverse_iterator crend() const noexcept
+    {
+        return const_reverse_iterator(begin());
     }
 
     size_type size() const noexcept
