@@ -42,7 +42,7 @@ const T& BaseMatrix<T>::atBase(MatrixSize p_row, MatrixSize p_col) const
         throw std::out_of_range("invalid matrix column index");
     }
 
-    return m_elementsData[p_row * m_cols + p_col];
+    return *(m_elementsData + (p_row * m_cols + p_col));
 }
 
 template<typename T>
@@ -57,7 +57,7 @@ std::ostream& BaseMatrix<T>::outputBase(std::ostream& p_out) const
     {
         for(auto col = 0u; col < m_cols; ++col)
         {
-            p_out << m_elementsData[row * m_cols + col] << ' ';
+            p_out << *(m_elementsData + (row * m_cols + col)) << ' ';
         }
 
         if(row < m_rows - 1)

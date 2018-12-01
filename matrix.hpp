@@ -105,8 +105,8 @@ public:
         {
         }
 
-        template<typename Iterator, typename = typename std::enable_if_t<
-            std::is_same<Iterator, typename Matrix::pointer>::value>
+        template<typename Iterator, typename = typename std::enable_if<
+            std::is_same<Iterator, typename Matrix::pointer>::value>::type
         >
         MatrixIterator(const MatrixIterator<Iterator>& p_iterator)
             : m_elementsData{p_iterator.base()}
