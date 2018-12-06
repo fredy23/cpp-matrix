@@ -300,6 +300,22 @@ public:
         return Rows * Cols;
     }
 
+    Matrix& operator+=(const Matrix& p_other)
+    {
+        std::transform(begin(), end(), p_other.begin(), begin(), 
+        [](const T& p_first, const T& p_second)
+        {
+            return p_first + p_second;
+        });
+
+        return *this;
+    }
+
+    const Matrix operator+(const Matrix& p_other)
+    {
+        return Matrix(*this) += p_other;
+    }
+
     friend std::ostream& operator<<(std::ostream& p_out, const Matrix& p_matrix)
     {
         return p_matrix.output(p_out);
