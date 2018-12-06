@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <algorithm>
 
 using MatrixSize = std::size_t;
 
@@ -18,7 +19,13 @@ protected:
         m_elementsData = p_elementsData;
     }
 
+    MatrixSize sizeBase() const
+    {
+        return m_rows * m_cols;
+    }
+
     const T& atBase(MatrixSize p_row, MatrixSize p_col) const;
+    void scalarMulBase(const T& p_scalar);
 
     std::ostream& outputBase(std::ostream& p_out) const;
 
@@ -43,6 +50,19 @@ const T& BaseMatrix<T>::atBase(MatrixSize p_row, MatrixSize p_col) const
     }
 
     return *(m_elementsData + (p_row * m_cols + p_col));
+}
+
+template<typename T>
+void BaseMatrix<T>::scalarMulBase(const T& p_scalar)
+{
+    std::transform(
+        m_elementsData,
+        m_elementsData + sizeBase(),
+        m_elementsData,
+        [&p_scalar](const T& p_elem)
+    {
+        return p_elem * p_scalar;
+    });
 }
 
 template<typename T>

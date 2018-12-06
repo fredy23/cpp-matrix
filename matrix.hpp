@@ -297,7 +297,7 @@ public:
 
     size_type size() const noexcept
     {
-        return Rows * Cols;
+        return BaseMatrix<T>::sizeBase();
     }
 
     Matrix& operator+=(const Matrix& p_other)
@@ -314,6 +314,22 @@ public:
     const Matrix operator+(const Matrix& p_other) const
     {
         return Matrix(*this) += p_other;
+    }
+
+    Matrix& operator*=(const T& p_scalar)
+    {
+        BaseMatrix<T>::scalarMulBase(p_scalar);
+        return *this;
+    }
+
+    const Matrix operator*(const T& p_scalar) const
+    {
+        return Matrix(*this) *= p_scalar;
+    }
+
+    friend const Matrix operator*(const T& p_scalar, const Matrix& p_matrix)
+    {
+        return p_matrix * p_scalar;
     }
 
     friend std::ostream& operator<<(std::ostream& p_out, const Matrix& p_matrix)
