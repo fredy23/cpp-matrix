@@ -311,7 +311,7 @@ public:
         return *this;
     }
 
-    const Matrix operator+(const Matrix& p_other)
+    const Matrix operator+(const Matrix& p_other) const
     {
         return Matrix(*this) += p_other;
     }
