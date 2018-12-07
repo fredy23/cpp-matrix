@@ -302,12 +302,7 @@ public:
 
     Matrix& operator+=(const Matrix& p_other)
     {
-        std::transform(begin(), end(), p_other.begin(), begin(), 
-        [](const T& p_first, const T& p_second)
-        {
-            return p_first + p_second;
-        });
-
+        BaseMatrix<T>::addToBase(p_other.data());
         return *this;
     }
 

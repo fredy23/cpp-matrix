@@ -25,6 +25,7 @@ protected:
     }
 
     const T& atBase(MatrixSize p_row, MatrixSize p_col) const;
+    void addToBase(const T* p_otherElementsData);
     void scalarMulBase(const T& p_scalar);
     void transposeToDestBase(T* p_destElementsData) const;
 
@@ -51,6 +52,20 @@ const T& BaseMatrix<T>::atBase(MatrixSize p_row, MatrixSize p_col) const
     }
 
     return *(m_elementsData + (p_row * m_cols + p_col));
+}
+
+template<typename T>
+void BaseMatrix<T>::addToBase(const T* p_otherElementsData)
+{
+    std::transform(
+        m_elementsData,
+        m_elementsData + sizeBase(),
+        p_otherElementsData,
+        m_elementsData,
+        [](const T& p_first, const T& p_second)
+    {
+        return p_first + p_second;
+    });
 }
 
 template<typename T>
