@@ -26,6 +26,7 @@ protected:
 
     const T& atBase(MatrixSize p_row, MatrixSize p_col) const;
     void scalarMulBase(const T& p_scalar);
+    void transposeToDestBase(T* p_destElementsData) const;
 
     std::ostream& outputBase(std::ostream& p_out) const;
 
@@ -63,6 +64,17 @@ void BaseMatrix<T>::scalarMulBase(const T& p_scalar)
     {
         return p_elem * p_scalar;
     });
+}
+
+template<typename T>
+void BaseMatrix<T>::transposeToDestBase(T* p_destElementsData) const
+{
+    for(auto i = 0u; i < m_rows * m_cols; ++i)
+    {
+        int row = i / m_rows;
+        int col = i % m_rows;
+        *(p_destElementsData++) = *(m_elementsData + (col * m_cols + row));
+    }
 }
 
 template<typename T>

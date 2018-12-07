@@ -316,6 +316,13 @@ public:
         return Matrix(*this) += p_other;
     }
 
+    const Matrix<T, Cols, Rows> transpose() const
+    {
+        Matrix<T, Cols, Rows> result {};
+        BaseMatrix<T>::transposeToDestBase(result.data());
+        return result;
+    }
+
     Matrix& operator*=(const T& p_scalar)
     {
         BaseMatrix<T>::scalarMulBase(p_scalar);
