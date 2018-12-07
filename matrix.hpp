@@ -22,6 +22,7 @@ public:
     using pointer           = T*;
     using const_pointer     = const T*;
 
+    Matrix();
     Matrix(const std::initializer_list<T>& p_elements);
     Matrix(const Matrix& p_other);
     Matrix& operator=(const Matrix& p_other);
@@ -349,22 +350,26 @@ private:
 };
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
-Matrix<T, Rows, Cols>::Matrix(const std::initializer_list<T>& p_elements)
+Matrix<T, Rows, Cols>::Matrix()
     : BaseMatrix<T>(Rows, Cols)
 {
-    static_assert(Rows > 0 && Cols > 0, "invalid matrix size");
+    static_assert(Rows > 0 && Cols > 0, "Invalid matrix size");
 
     m_elements = new T[Rows * Cols];
-
-    auto offset = std::max<int>(0, p_elements.size() - Rows * Cols);
-    std::copy(p_elements.begin(), p_elements.end() - offset, m_elements);
-
     BaseMatrix<T>::setData(m_elements);
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
+Matrix<T, Rows, Cols>::Matrix(const std::initializer_list<T>& p_elements)
+    : Matrix()
+{
+    auto offset = std::max<int>(0, p_elements.size() - Rows * Cols);
+    std::copy(p_elements.begin(), p_elements.end() - offset, m_elements);
+}
+
+template<typename T, MatrixSize Rows, MatrixSize Cols>
 Matrix<T, Rows, Cols>::Matrix(const Matrix& p_other)
-    : Matrix(std::initializer_list<T>{})
+    : Matrix()
 {
     std::copy(p_other.m_elements, p_other.m_elements + (Rows * Cols), m_elements);
 }
