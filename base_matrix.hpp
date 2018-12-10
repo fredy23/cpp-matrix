@@ -26,12 +26,18 @@ protected:
 
     const T& atBase(MatrixSize p_row, MatrixSize p_col) const;
     void addToBase(const T* p_otherElementsData);
+    void multiplyToDestBase(
+        T* p_destElementsData,
+        const T* p_transposedData,
+        MatrixSize p_transposedRows) const;
     void scalarMulBase(const T& p_scalar);
     void transposeToDestBase(T* p_destElementsData) const;
 
     std::ostream& outputBase(std::ostream& p_out) const;
 
 private:
+    T innerProduct(const T* first1, const T* last1, const T* first2) const;
+
     MatrixSize m_rows;
     MatrixSize m_cols;
 
@@ -66,6 +72,31 @@ void BaseMatrix<T>::addToBase(const T* p_otherElementsData)
     {
         return p_first + p_second;
     });
+}
+
+template<typename T>
+T BaseMatrix<T>::innerProduct(const T* first1, const T* last1, const T* first2) const
+{
+    T result = *first1++ * *first2++;
+    return std::inner_product(first1, last1, first2, result);
+}
+
+template<typename T>
+void BaseMatrix<T>::multiplyToDestBase(
+    T* p_destElementsData,
+    const T* p_transposedData,
+    MatrixSize p_transposedRows) const
+{
+    for(auto i = 0u; i < sizeBase(); i += m_cols)
+    {
+        for(auto j = 0u; j < m_cols * p_transposedRows; j += m_cols)
+        {
+            *(p_destElementsData++) = innerProduct(
+                m_elementsData + i,
+                m_elementsData + i + m_cols,
+                p_transposedData + j);
+        }
+    }
 }
 
 template<typename T>

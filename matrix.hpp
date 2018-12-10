@@ -319,6 +319,16 @@ public:
         return result;
     }
 
+    template<MatrixSize RowsOther, MatrixSize ColsOther>
+    const Matrix<T, Rows, ColsOther> operator*(const Matrix<T, RowsOther, ColsOther>& p_other)
+    {
+        static_assert(RowsOther == Cols, "Matrix dimensions must agree");
+
+        Matrix<T, Rows, ColsOther> result {};
+        BaseMatrix<T>::multiplyToDestBase(result.data(), p_other.transpose().data(), ColsOther);
+        return result;
+    }
+
     Matrix& operator*=(const T& p_scalar)
     {
         BaseMatrix<T>::scalarMulBase(p_scalar);
