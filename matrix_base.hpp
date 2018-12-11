@@ -33,7 +33,7 @@ protected:
     std::ostream& baseOutput(std::ostream& p_out) const;
 
 private:
-    T innerProduct(const T* first1, const T* last1, const T* first2) const;
+    static T innerProduct(const T* first1, const T* last1, const T* first2);
 
     MatrixSize m_rows;
     MatrixSize m_cols;
@@ -72,7 +72,7 @@ void MatrixBase<T>::baseAdd(const T* p_otherElementsData)
 }
 
 template<typename T>
-T MatrixBase<T>::innerProduct(const T* first1, const T* last1, const T* first2) const
+T MatrixBase<T>::innerProduct(const T* first1, const T* last1, const T* first2)
 {
     T result = *first1++ * *first2++;
     return std::inner_product(first1, last1, first2, result);
