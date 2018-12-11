@@ -37,7 +37,7 @@ public:
 
     const_reference at(MatrixSize p_row, MatrixSize p_col) const
     {
-        return MatrixBase<T>::atBase(p_row, p_col);
+        return MatrixBase<T>::baseAt(p_row, p_col);
     }
 
     class MatrixRow
@@ -298,12 +298,12 @@ public:
 
     size_type size() const noexcept
     {
-        return MatrixBase<T>::sizeBase();
+        return MatrixBase<T>::baseSize();
     }
 
     Matrix& operator+=(const Matrix& p_other)
     {
-        MatrixBase<T>::addToBase(p_other.data());
+        MatrixBase<T>::baseAdd(p_other.data());
         return *this;
     }
 
@@ -315,7 +315,7 @@ public:
     const Matrix<T, Cols, Rows> transpose() const
     {
         Matrix<T, Cols, Rows> result {};
-        MatrixBase<T>::transposeToDestBase(result.data());
+        MatrixBase<T>::baseTransposeTo(result.data());
         return result;
     }
 
@@ -325,13 +325,13 @@ public:
         static_assert(RowsOther == Cols, "Matrix dimensions must agree");
 
         Matrix<T, Rows, ColsOther> result {};
-        MatrixBase<T>::multiplyToDestBase(result.data(), p_other.transpose().data(), ColsOther);
+        MatrixBase<T>::baseMultiplyTo(result.data(), p_other.transpose().data(), ColsOther);
         return result;
     }
 
     Matrix& operator*=(const T& p_scalar)
     {
-        MatrixBase<T>::scalarMulBase(p_scalar);
+        MatrixBase<T>::baseMultiplyByScalar(p_scalar);
         return *this;
     }
 
@@ -355,7 +355,7 @@ private:
 
     std::ostream& output(std::ostream& p_out) const
     {
-        return MatrixBase<T>::outputBase(p_out);
+        return MatrixBase<T>::baseOutput(p_out);
     }
 };
 
@@ -363,10 +363,10 @@ template<typename T, MatrixSize Rows, MatrixSize Cols>
 Matrix<T, Rows, Cols>::Matrix()
     : MatrixBase<T>(Rows, Cols)
 {
-    static_assert(Rows > 0 && Cols > 0, "Invalid matrix size");
+    static_assert(Rows > 0 && Cols > 0, "Invalid matrix dimension");
 
     m_elements = new T[Rows * Cols];
-    MatrixBase<T>::setData(m_elements);
+    MatrixBase<T>::baseSetElementsData(m_elements);
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
@@ -396,16 +396,16 @@ Matrix<T, Rows, Cols>::Matrix(Matrix&& p_other) noexcept
     : MatrixBase<T>(Rows, Cols), m_elements{p_other.m_elements}
 {
     p_other.m_elements = nullptr;
-    p_other.MatrixBase<T>::setData(p_other.m_elements);
-    MatrixBase<T>::setData(m_elements);
+    p_other.MatrixBase<T>::baseSetElementsData(p_other.m_elements);
+    MatrixBase<T>::baseSetElementsData(m_elements);
 }
 
 template<typename T, MatrixSize Rows, MatrixSize Cols>
 Matrix<T, Rows, Cols>& Matrix<T, Rows, Cols>::operator=(Matrix&& p_other) noexcept
 {
     std::swap(m_elements, p_other.m_elements);
-    p_other.MatrixBase<T>::setData(p_other.m_elements);
-    MatrixBase<T>::setData(m_elements);
+    p_other.MatrixBase<T>::baseSetElementsData(p_other.m_elements);
+    MatrixBase<T>::baseSetElementsData(m_elements);
     return *this;
 }
 

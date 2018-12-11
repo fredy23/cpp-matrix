@@ -14,26 +14,23 @@ protected:
     {
     }
 
-    void setData(T* p_elementsData)
+    void baseSetElementsData(T* p_elementsData)
     {
         m_elementsData = p_elementsData;
     }
 
-    MatrixSize sizeBase() const
+    MatrixSize baseSize() const
     {
         return m_rows * m_cols;
     }
 
-    const T& atBase(MatrixSize p_row, MatrixSize p_col) const;
-    void addToBase(const T* p_otherElementsData);
-    void multiplyToDestBase(
-        T* p_destElementsData,
-        const T* p_transposedData,
-        MatrixSize p_transposedRows) const;
-    void scalarMulBase(const T& p_scalar);
-    void transposeToDestBase(T* p_destElementsData) const;
+    const T& baseAt(MatrixSize p_row, MatrixSize p_col) const;
+    void baseAdd(const T* p_otherElementsData);
+    void baseMultiplyTo(T* p_destElementsData, const T* p_transposedData, MatrixSize p_transposedRows) const;
+    void baseMultiplyByScalar(const T& p_scalar);
+    void baseTransposeTo(T* p_destElementsData) const;
 
-    std::ostream& outputBase(std::ostream& p_out) const;
+    std::ostream& baseOutput(std::ostream& p_out) const;
 
 private:
     T innerProduct(const T* first1, const T* last1, const T* first2) const;
@@ -45,7 +42,7 @@ private:
 };
 
 template<typename T>
-const T& MatrixBase<T>::atBase(MatrixSize p_row, MatrixSize p_col) const
+const T& MatrixBase<T>::baseAt(MatrixSize p_row, MatrixSize p_col) const
 {
     if(p_row < 0 || p_row >= m_rows)
     {
@@ -61,11 +58,11 @@ const T& MatrixBase<T>::atBase(MatrixSize p_row, MatrixSize p_col) const
 }
 
 template<typename T>
-void MatrixBase<T>::addToBase(const T* p_otherElementsData)
+void MatrixBase<T>::baseAdd(const T* p_otherElementsData)
 {
     std::transform(
         m_elementsData,
-        m_elementsData + sizeBase(),
+        m_elementsData + baseSize(),
         p_otherElementsData,
         m_elementsData,
         [](const T& p_first, const T& p_second)
@@ -82,12 +79,9 @@ T MatrixBase<T>::innerProduct(const T* first1, const T* last1, const T* first2) 
 }
 
 template<typename T>
-void MatrixBase<T>::multiplyToDestBase(
-    T* p_destElementsData,
-    const T* p_transposedData,
-    MatrixSize p_transposedRows) const
+void MatrixBase<T>::baseMultiplyTo(T* p_destElementsData, const T* p_transposedData, MatrixSize p_transposedRows) const
 {
-    for(auto i = 0u; i < sizeBase(); i += m_cols)
+    for(auto i = 0u; i < baseSize(); i += m_cols)
     {
         for(auto j = 0u; j < m_cols * p_transposedRows; j += m_cols)
         {
@@ -100,11 +94,11 @@ void MatrixBase<T>::multiplyToDestBase(
 }
 
 template<typename T>
-void MatrixBase<T>::scalarMulBase(const T& p_scalar)
+void MatrixBase<T>::baseMultiplyByScalar(const T& p_scalar)
 {
     std::transform(
         m_elementsData,
-        m_elementsData + sizeBase(),
+        m_elementsData + baseSize(),
         m_elementsData,
         [&p_scalar](const T& p_elem)
     {
@@ -113,7 +107,7 @@ void MatrixBase<T>::scalarMulBase(const T& p_scalar)
 }
 
 template<typename T>
-void MatrixBase<T>::transposeToDestBase(T* p_destElementsData) const
+void MatrixBase<T>::baseTransposeTo(T* p_destElementsData) const
 {
     for(auto i = 0u; i < m_rows * m_cols; ++i)
     {
@@ -124,7 +118,7 @@ void MatrixBase<T>::transposeToDestBase(T* p_destElementsData) const
 }
 
 template<typename T>
-std::ostream& MatrixBase<T>::outputBase(std::ostream& p_out) const
+std::ostream& MatrixBase<T>::baseOutput(std::ostream& p_out) const
 {
     if(m_elementsData == nullptr)
     {
