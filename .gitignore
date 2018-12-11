@@ -1,5 +1,5 @@
 *
 !.gitignore
 !matrix.hpp
-!base_matrix.hpp
+!matrix_base.hpp
 
