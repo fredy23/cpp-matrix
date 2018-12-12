@@ -414,3 +414,19 @@ Matrix<T, Rows, Cols>::~Matrix()
 {
     delete[] m_elements;
 }
+
+template<typename T, MatrixSize Rows, MatrixSize Cols>
+bool operator==(
+    const Matrix<T, Rows, Cols>& p_left,
+    const Matrix<T, Rows, Cols>& p_right)
+{
+    return std::equal(p_left.begin(), p_left.end(), p_right.begin());
+}
+
+template<typename T, MatrixSize Rows, MatrixSize Cols>
+bool operator!=(
+    const Matrix<T, Rows, Cols>& p_left,
+    const Matrix<T, Rows, Cols>& p_right)
+{
+    return !(p_left == p_right);
+}
